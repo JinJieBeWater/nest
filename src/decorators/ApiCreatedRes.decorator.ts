@@ -1,5 +1,9 @@
 import { applyDecorators, Type } from '@nestjs/common';
-import { ApiCreatedResponse, ApiExtraModels, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiCreatedResponse,
+  ApiExtraModels,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import { ResultVo } from 'src/class/vo/result.vo';
 
 export const ApiCreatedRes = <TModel extends Type<any>>(model: TModel) => {
