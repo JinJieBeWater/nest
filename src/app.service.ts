@@ -11,7 +11,7 @@ export class AppService {
   ) {}
 
   getHello(): string {
-    return 'Hello World!';
+    return '与后端服务连接成功';
   }
 
   async usersPage() {
