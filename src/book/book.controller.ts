@@ -11,7 +11,6 @@ import {
   Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { Book as PrismaBook } from '@prisma/client';
 import { ApiCreatedRes } from 'src/decorators/ApiCreatedRes.decorator';
 import { ApiOkRes } from 'src/decorators/ApiOkRes.decorator';
 import { ApiPaginatedRes } from 'src/decorators/ApiPaginatedRes.decorator';
@@ -29,7 +28,7 @@ export class BookController {
   @Post()
   @ApiOperation({ summary: '创建', description: '' })
   @ApiCreatedRes(Book)
-  createbook(@Body() data: CreateBookDto): Promise<PrismaBook> {
+  createbook(@Body() data: CreateBookDto) {
     return this.bookService.createBook(data);
   }
 
@@ -70,7 +69,7 @@ export class BookController {
   @Get(':id')
   @ApiOperation({ summary: '单个查询', description: '' })
   @ApiOkRes(Book)
-  findOnebook(@Param('id', ParseIntPipe) id: number): Promise<PrismaBook> {
+  findOnebook(@Param('id', ParseIntPipe) id: number) {
     return this.bookService.Book({ id: +id });
   }
 
@@ -80,7 +79,7 @@ export class BookController {
   updatebook(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateBookDto,
-  ): Promise<PrismaBook> {
+  ) {
     return this.bookService.updateBook({
       where: { id: +id },
       data: data,
@@ -90,7 +89,7 @@ export class BookController {
   @Delete(':id')
   @ApiOperation({ summary: '删除', description: '' })
   @ApiOkRes(Book)
-  removebook(@Param('id', ParseIntPipe) id: number): Promise<PrismaBook> {
+  removebook(@Param('id', ParseIntPipe) id: number) {
     return this.bookService.deleteBook({ id: +id });
   }
 }
