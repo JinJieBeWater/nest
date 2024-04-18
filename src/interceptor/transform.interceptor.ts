@@ -22,9 +22,9 @@ export class TransformInterceptor<T>
   ): Observable<Response<T>> {
     return next.handle().pipe(
       map((data) => ({
-        data,
-        msg: '后端传来喜报，接口调用成功啦~',
         code: HttpStatus.OK,
+        msg: '后端传来喜报，接口调用成功啦~',
+        data,
       })),
     );
   }
