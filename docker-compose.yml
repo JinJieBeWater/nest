@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  nest-api:
+    container_name: nest-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+
+  nginx:
+    image: nginx:stable-alpine # 指定服务镜像
+    container_name: nginx # 容器名称
+    restart: always # 重启方式
+    ports: # 映射端口
+      - '80:80'
+      - '443:443'
+    volumes: # 挂载数据卷
+      - /etc/localtime:/etc/localtime
+      - /home/ubuntu/work/nginx/conf.d:/etc/nginx/conf.d
+      - /home/ubuntu/work/nginx/logs:/var/log/nginx
+      - /home/ubuntu/work/nginx/cert:/etc/nginx/cert
+    depends_on: # 启动顺序
+      - nest-api

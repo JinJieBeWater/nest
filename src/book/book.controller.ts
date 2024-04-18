@@ -16,9 +16,9 @@ import { ApiOkRes } from 'src/decorators/ApiOkRes.decorator';
 import { ApiPaginatedRes } from 'src/decorators/ApiPaginatedRes.decorator';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
 import { PaginationVo } from 'src/class/vo/pagination.vo';
+import { BookQueryDto } from './dto/paginate-book.dto';
 
 @ApiTags('Book')
 @Controller('book')
@@ -35,16 +35,10 @@ export class BookController {
   @Get('pagination')
   @ApiOperation({ summary: '分页查询', description: '' })
   @ApiPaginatedRes(Book)
-  @ApiQuery({ name: 'currentPage', description: '当前页码', example: 1 })
-  @ApiQuery({ name: 'pageSize', description: '每页条数', example: 10 })
-  @ApiQuery({ name: 'name', description: '名称', example: '前端' })
-  @ApiQuery({ name: 'desc', description: '描述', required: false })
   async paginationbook(
-    @Query('currentPage', ParseIntPipe) currentPage: number,
-    @Query('pageSize', ParseIntPipe) pageSize: number,
-    @Query('name') name: string,
-    @Optional() @Query('desc') desc: string,
+    @Query() query: BookQueryDto,
   ): Promise<PaginationVo<Book>> {
+    const { currentPage, pageSize, name, author, sortMethod } = query;
     const data = await this.bookService.Books({
       skip: pageSize * (currentPage - 1),
       take: pageSize,
@@ -52,9 +46,12 @@ export class BookController {
         name: {
           contains: name,
         },
-        desc: {
-          contains: desc,
+        author: {
+          contains: author,
         },
+      },
+      orderBy: {
+        firstEdition: sortMethod,
       },
     });
     const total = await this.bookService.countBook();
@@ -78,7 +75,7 @@ export class BookController {
   @ApiOkRes(Book)
   updatebook(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: UpdateBookDto,
+    @Body() data: CreateBookDto,
   ) {
     return this.bookService.updateBook({
       where: { id: +id },

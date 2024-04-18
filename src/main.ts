@@ -6,7 +6,6 @@ import {
   SwaggerDocumentOptions,
   SwaggerModule,
 } from '@nestjs/swagger';
-import { PrismaModel } from './generated/prisma-class';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -29,7 +28,7 @@ async function bootstrap() {
    */
   const options: SwaggerDocumentOptions = {
     operationIdFactory: (controllerKey: string, methodKey: string) => methodKey,
-    extraModels: [...PrismaModel.extraModels],
+    // extraModels: [...PrismaModel.extraModels],
   };
   /**
    * 创建 OpenAPI 文档 的可序列化对象

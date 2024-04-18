@@ -1,4 +1,4 @@
-import { Prisma } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime/library';
 
 export class Book {
   id: number;
@@ -7,6 +7,6 @@ export class Book {
   desc: string | null;
   firstEdition: Date;
   stock: number;
-  price: Prisma.Decimal;
+  price: number | Decimal;
   createdAt: Date;
 }
