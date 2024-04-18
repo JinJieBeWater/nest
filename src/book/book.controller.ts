@@ -9,18 +9,17 @@ import {
   Patch,
   Post,
   Query,
-  UseInterceptors,
 } from '@nestjs/common';
 import { ApiOperation, ApiQuery, ApiTags } from '@nestjs/swagger';
-import { PaginationVo } from 'src/class/vo/pagination.vo';
+import { Book as PrismaBook } from '@prisma/client';
 import { ApiCreatedRes } from 'src/decorators/ApiCreatedRes.decorator';
 import { ApiOkRes } from 'src/decorators/ApiOkRes.decorator';
 import { ApiPaginatedRes } from 'src/decorators/ApiPaginatedRes.decorator';
-import { UpdateBookDto } from 'src/generated/nestjs-dto/book/dto/update-book.dto';
-import { Book } from 'src/generated/nestjs-dto/book/entities/book.entity';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
-import { Prisma } from '@prisma/client';
+import { UpdateBookDto } from './dto/update-book.dto';
+import { Book } from './entities/book.entity';
+import { PaginationVo } from 'src/class/vo/pagination.vo';
 
 @ApiTags('Book')
 @Controller('book')
@@ -30,7 +29,7 @@ export class BookController {
   @Post()
   @ApiOperation({ summary: '创建', description: '' })
   @ApiCreatedRes(Book)
-  createbook(@Body() data: CreateBookDto) {
+  createbook(@Body() data: CreateBookDto): Promise<PrismaBook> {
     return this.bookService.createBook(data);
   }
 
@@ -46,7 +45,7 @@ export class BookController {
     @Query('pageSize', ParseIntPipe) pageSize: number,
     @Query('name') name: string,
     @Optional() @Query('desc') desc: string,
-  ) {
+  ): Promise<PaginationVo<Book>> {
     const data = await this.bookService.Books({
       skip: pageSize * (currentPage - 1),
       take: pageSize,
@@ -71,7 +70,7 @@ export class BookController {
   @Get(':id')
   @ApiOperation({ summary: '单个查询', description: '' })
   @ApiOkRes(Book)
-  findOnebook(@Param('id', ParseIntPipe) id: number) {
+  findOnebook(@Param('id', ParseIntPipe) id: number): Promise<PrismaBook> {
     return this.bookService.Book({ id: +id });
   }
 
@@ -81,7 +80,7 @@ export class BookController {
   updatebook(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: UpdateBookDto,
-  ) {
+  ): Promise<PrismaBook> {
     return this.bookService.updateBook({
       where: { id: +id },
       data: data,
@@ -91,7 +90,7 @@ export class BookController {
   @Delete(':id')
   @ApiOperation({ summary: '删除', description: '' })
   @ApiOkRes(Book)
-  removebook(@Param('id', ParseIntPipe) id: number) {
+  removebook(@Param('id', ParseIntPipe) id: number): Promise<PrismaBook> {
     return this.bookService.deleteBook({ id: +id });
   }
 }
