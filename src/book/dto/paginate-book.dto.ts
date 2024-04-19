@@ -26,7 +26,7 @@ export class BookQueryDto {
   author?: string;
 
   @ApiPropertyOptional({
-    description: '排序方式',
+    description: '排序方式(根据出版日期)',
     example: 'desc',
     enum: ['asc', 'desc'],
   })
