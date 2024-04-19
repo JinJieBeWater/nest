@@ -36,6 +36,17 @@ export class BookService {
   }
 
   async createBook(data: Prisma.BookCreateInput): Promise<Book> {
+    this.prismaService.client.book.create({
+      data: {
+        name: '消化',
+        author: '张三',
+        price: 100,
+        firstEdition: new Date(),
+        stock: 100,
+        createdAt: new Date(),
+        desc: '描述',
+      },
+    });
     return this.prismaService.client.book.create({
       data,
     });

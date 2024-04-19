@@ -42,6 +42,10 @@ import { TransformInterceptor } from './interceptor/transform.interceptor';
       inject: [HttpAdapterHost],
     },
     {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+    {
       provide: APP_INTERCEPTOR,
       useClass: TransformInterceptor,
     },
@@ -49,10 +53,7 @@ import { TransformInterceptor } from './interceptor/transform.interceptor';
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
-    {
-      provide: APP_FILTER,
-      useClass: HttpExceptionFilter,
-    },
+
     AppService,
   ],
 })
