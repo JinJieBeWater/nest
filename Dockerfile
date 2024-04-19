@@ -1,26 +1,35 @@
-FROM node:16-alpine AS builder
+FROM node:18.0-alpine3.14 as build-stage
 
-# Create app directory
+ENV DATABASE_URL=file:./dev.db
+
 WORKDIR /app
 
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-COPY package*.json ./
-COPY prisma ./prisma/
+COPY package.json .
 
-# Install app dependencies
 RUN npm install
 
 COPY . .
 
+RUN npm run migrate:dev
+
+RUN npm run prisma:generate
+
 RUN npm run build
 
-FROM node:16-alpine
+# production stage
+FROM node:18.0-alpine3.14 as production-stage
+
+COPY --from=build-stage /app/dist /app
+COPY --from=build-stage /app/package.json /app/package.json
 
 WORKDIR /app
 
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/package*.json ./
-COPY --from=builder /app/dist ./dist
+RUN npm run migrate:dev
+
+RUN npm run prisma:generate
+
+RUN npm install --production
 
 EXPOSE 3000
-CMD [ "npm", "run", "start:prod" ]
+
+CMD ["node", "/app/main.js"]
