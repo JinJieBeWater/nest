@@ -44,6 +44,9 @@ dependencies:
   prisma-extension-pagination:
     specifier: ^0.7.2
     version: 0.7.2(@prisma/client@5.12.1)
+  prisma-paginate:
+    specifier: ^5.2.1
+    version: 5.2.1(@prisma/client@5.12.1)(prisma@5.12.1)
   reflect-metadata:
     specifier: ^0.1.13
     version: 0.1.14
@@ -5224,6 +5227,16 @@ packages:
       '@prisma/client': ^4.9.0 || ^5.0.0
     dependencies:
       '@prisma/client': 5.12.1(prisma@5.12.1)
+    dev: false
+
+  /prisma-paginate@5.2.1(@prisma/client@5.12.1)(prisma@5.12.1):
+    resolution: {integrity: sha512-GwR39iSOGUqTkfpEl75hA/LyMUkhAwc2DqyhDkO6ug+u3zBUZlIfEWolqHOCrHOAKQlaNpgnP2nxFLH0LjBMtA==}
+    peerDependencies:
+      '@prisma/client': '>=4.9.0'
+      prisma: '>=4.9.0'
+    dependencies:
+      '@prisma/client': 5.12.1(prisma@5.12.1)
+      prisma: 5.12.1
     dev: false
 
   /prisma@5.12.1:

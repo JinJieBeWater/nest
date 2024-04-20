@@ -7,13 +7,13 @@ export class BookQueryDto {
   @IsInt()
   @Min(1)
   @Transform(({ value }) => parseInt(value))
-  currentPage: number = 1;
+  page: number;
 
   @ApiProperty({ description: '每页条数', example: 10 })
   @IsInt()
   @Min(1)
   @Transform(({ value }) => parseInt(value))
-  pageSize: number = 10;
+  limit: number;
 
   @ApiPropertyOptional({ description: '名称' })
   @IsOptional()

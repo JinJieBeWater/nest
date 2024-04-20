@@ -39,6 +39,7 @@
     "prisma-class-generator": "^0.2.9",
     "prisma-class-validator-generator": "^5.0.0",
     "prisma-extension-pagination": "^0.7.2",
+    "prisma-paginate": "^5.2.1",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1"
   },

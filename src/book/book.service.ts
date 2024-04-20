@@ -1,3 +1,4 @@
+import { paginateDto } from './../class/dto/paginate.dto';
 import { Inject, Injectable } from '@nestjs/common';
 import { Prisma, Book } from '@prisma/client';
 import { CustomPrismaService } from 'nestjs-prisma';
@@ -71,5 +72,16 @@ export class BookService {
 
   async countBook(where?: Prisma.BookWhereInput): Promise<number> {
     return this.prismaService.client.book.count({ where });
+  }
+
+  async paginateBook(query: paginateDto) {
+    const { where, orderBy, page, limit } = query;
+    // 🦾 use new `paginate` function
+    return await this.prismaService.client.book.paginate({
+      where,
+      orderBy,
+      page,
+      limit,
+    });
   }
 }

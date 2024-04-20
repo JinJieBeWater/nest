@@ -1,26 +1,33 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Decimal } from '@prisma/client/runtime/library';
 
 export class PaginationVo<TData> {
   @ApiProperty({
     description: '数据',
   })
   records: TData[];
-
-  @ApiProperty({
-    description: '当前页码',
-    minimum: 1,
-  })
-  currentPage: number;
-
   @ApiProperty({
     description: '每页条数',
     example: 10,
   })
-  pageSize: number;
-
+  limit: number;
   @ApiProperty({
-    description: '总条数',
+    description: '当前页码',
+    example: 1,
+  })
+  page: number;
+  @ApiProperty({
+    description: '总条数数',
     example: 100,
   })
-  total: number;
+  count: number;
+  @ApiProperty({
+    description: '是否超过总条数数',
+  })
+  exceedCount: boolean;
+
+  @ApiProperty({
+    description: '是否超过总页数',
+  })
+  exceedTotalPages: boolean;
 }

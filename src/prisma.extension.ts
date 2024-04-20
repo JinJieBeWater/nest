@@ -1,14 +1,14 @@
 import { PrismaClient } from '@prisma/client';
-import { loggingMiddleware } from 'nestjs-prisma';
 import pagination from 'prisma-extension-pagination';
 import { performance } from 'perf_hooks';
 import * as util from 'util';
-
+import extension from 'prisma-paginate';
 /**
  * Extended Prisma Client
  */
 export const extendedPrismaClient = new PrismaClient()
-  .$extends(pagination())
+  // .$extends(pagination())
+  .$extends(extension)
   .$extends({
     query: {
       $allModels: {

@@ -13,20 +13,4 @@ export class AppService {
   getHello(): string {
     return '与后端服务连接成功';
   }
-
-  async usersPage() {
-    // 🦾 use new `paginate` function
-    const [books, meta] = await this.prismaService.client.book
-      .paginate()
-      .withPages({
-        limit: 10,
-        page: 1,
-        includePageCount: true,
-      });
-
-    return {
-      books,
-      meta,
-    };
-  }
 }

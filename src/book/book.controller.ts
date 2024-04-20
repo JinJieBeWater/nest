@@ -17,7 +17,6 @@ import { ApiPaginatedRes } from 'src/decorators/ApiPaginatedRes.decorator';
 import { BookService } from './book.service';
 import { CreateBookDto } from './dto/create-book.dto';
 import { Book } from './entities/book.entity';
-import { PaginationVo } from 'src/class/vo/pagination.vo';
 import { BookQueryDto } from './dto/paginate-book.dto';
 
 @ApiTags('Book')
@@ -28,20 +27,18 @@ export class BookController {
   @Post()
   @ApiOperation({ summary: '创建', description: '' })
   @ApiCreatedRes(Book)
-  createbook(@Body() data: CreateBookDto) {
+  createBook(@Body() data: CreateBookDto) {
     return this.bookService.createBook(data);
   }
 
-  @Get('pagination')
+  @Get('paginate')
   @ApiOperation({ summary: '分页查询', description: '' })
   @ApiPaginatedRes(Book)
-  async paginationbook(
-    @Query() query: BookQueryDto,
-  ): Promise<PaginationVo<Book>> {
-    const { currentPage, pageSize, name, author, sortMethod } = query;
-    const data = await this.bookService.Books({
-      skip: pageSize * (currentPage - 1),
-      take: pageSize,
+  async paginateBook(@Query() query: BookQueryDto) {
+    const { limit, page, name, author, sortMethod } = query;
+    const res = await this.bookService.paginateBook({
+      limit,
+      page,
       where: {
         name: {
           contains: name,
@@ -54,26 +51,53 @@ export class BookController {
         firstEdition: sortMethod,
       },
     });
-    const total = await this.bookService.countBook();
     return {
-      records: data,
-      currentPage: currentPage,
-      pageSize: pageSize,
-      total: total,
+      ...res,
     };
   }
+
+  // @Get('pagination')
+  // @ApiOperation({ summary: '分页查询', description: '' })
+  // @ApiPaginatedRes(Book)
+  // async paginationbook(
+  //   @Query() query: BookQueryDto,
+  // ): Promise<PaginationVo<Book>> {
+  //   const { currentPage, pageSize, name, author, sortMethod } = query;
+  //   const data = await this.bookService.Books({
+  //     skip: pageSize * (currentPage - 1),
+  //     take: pageSize,
+  //     where: {
+  //       name: {
+  //         contains: name,
+  //       },
+  //       author: {
+  //         contains: author,
+  //       },
+  //     },
+  //     orderBy: {
+  //       firstEdition: sortMethod,
+  //     },
+  //   });
+  //   const total = await this.bookService.countBook();
+  //   return {
+  //     records: data,
+  //     currentPage: currentPage,
+  //     pageSize: pageSize,
+  //     total: total,
+  //   };
+  // }
 
   @Get(':id')
   @ApiOperation({ summary: '单个查询', description: '' })
   @ApiOkRes(Book)
-  findOnebook(@Param('id', ParseIntPipe) id: number) {
+  findOneBook(@Param('id', ParseIntPipe) id: number) {
     return this.bookService.Book({ id: +id });
   }
 
   @Patch(':id')
   @ApiOperation({ summary: '修改', description: '' })
   @ApiOkRes(Book)
-  updatebook(
+  updateBook(
     @Param('id', ParseIntPipe) id: number,
     @Body() data: CreateBookDto,
   ) {
@@ -86,7 +110,7 @@ export class BookController {
   @Delete(':id')
   @ApiOperation({ summary: '删除', description: '' })
   @ApiOkRes(Book)
-  removebook(@Param('id', ParseIntPipe) id: number) {
+  removeBook(@Param('id', ParseIntPipe) id: number) {
     return this.bookService.deleteBook({ id: +id });
   }
 }
