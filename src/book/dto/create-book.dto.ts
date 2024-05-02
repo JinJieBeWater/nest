@@ -1,8 +1,10 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsDate,
+  IsDateString,
   IsDefined,
   IsInt,
+  IsISO8601,
   IsOptional,
   IsString,
 } from 'class-validator';
@@ -34,6 +36,6 @@ export class CreateBookDto {
 
   @ApiProperty({ description: '出版日期', example: '2024-04-19T08:14:33.277Z' })
   @IsDefined()
-  @IsDate()
+  @IsISO8601()
   firstEdition: Date;
 }
